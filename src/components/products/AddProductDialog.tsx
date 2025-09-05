@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Upload, Image as ImageIcon } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -38,6 +38,7 @@ const productSchema = z.object({
   description: z.string().default(''),
   location: z.string().default(''),
   supplier: z.string().default(''),
+  image: z.string().url('URL gambar tidak valid').or(z.literal('')).optional(),
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
@@ -59,6 +60,7 @@ const categories = [
 
 const AddProductDialog = ({ open, onOpenChange }: AddProductDialogProps) => {
   const { addProduct, isLoading } = useEnhancedProductManager();
+  const [imagePreview, setImagePreview] = useState<string>('');
   
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
@@ -73,8 +75,27 @@ const AddProductDialog = ({ open, onOpenChange }: AddProductDialogProps) => {
       description: '',
       location: '',
       supplier: '',
+      image: '',
     },
   });
+
+  const handleImageUrlChange = (url: string) => {
+    setImagePreview(url);
+    form.setValue('image', url);
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // For demo purposes, create a blob URL
+      // In production, you'd upload to a storage service
+      const url = URL.createObjectURL(file);
+      setImagePreview(url);
+      form.setValue('image', url);
+      
+      toast.success('Gambar berhasil diupload');
+    }
+  };
 
   const onSubmit = async (data: ProductFormData) => {
     try {
@@ -90,10 +111,12 @@ const AddProductDialog = ({ open, onOpenChange }: AddProductDialogProps) => {
         description: data.description || '',
         location: data.location || '',
         supplier: data.supplier || '',
+        image: data.image || '',
       };
       
       await addProduct(productData);
       form.reset();
+      setImagePreview('');
       onOpenChange(false);
     } catch (error) {
       // Error handling is done in the hook
@@ -290,6 +313,83 @@ const AddProductDialog = ({ open, onOpenChange }: AddProductDialogProps) => {
                 )}
               />
             </div>
+
+            {/* Product Image */}
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Gambar Produk</FormLabel>
+                  <div className="space-y-3">
+                    {/* Image Preview */}
+                    {imagePreview && (
+                      <div className="relative w-32 h-32 mx-auto border-2 border-dashed border-border rounded-lg overflow-hidden">
+                        <img 
+                          src={imagePreview} 
+                          alt="Preview" 
+                          className="w-full h-full object-cover"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute top-1 right-1 h-6 w-6 p-0 bg-background/80"
+                          onClick={() => {
+                            setImagePreview('');
+                            form.setValue('image', '');
+                          }}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    )}
+                    
+                    {/* Image URL Input */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <Label htmlFor="imageUrl" className="text-sm">URL Gambar</Label>
+                        <Input
+                          id="imageUrl"
+                          placeholder="https://example.com/image.jpg"
+                          value={field.value || ''}
+                          onChange={(e) => handleImageUrlChange(e.target.value)}
+                        />
+                      </div>
+                      
+                      {/* File Upload */}
+                      <div>
+                        <Label htmlFor="imageFile" className="text-sm">Upload File</Label>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            id="imageFile"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileUpload}
+                            className="hidden"
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => document.getElementById('imageFile')?.click()}
+                            className="w-full"
+                          >
+                            <Upload className="w-4 h-4 mr-2" />
+                            Pilih File
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <FormDescription>
+                      Masukkan URL gambar atau upload file gambar produk
+                    </FormDescription>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             {/* Description */}
             <FormField

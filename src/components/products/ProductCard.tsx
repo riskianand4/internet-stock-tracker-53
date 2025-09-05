@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MoreVertical, Edit, Trash2, Eye, Package, MapPin, Calendar } from 'lucide-react';
+import { MoreVertical, Edit, Trash2, Eye, Package, MapPin, Calendar, Image as ImageIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -91,16 +91,22 @@ const ProductCard = ({ product, isSelected, onSelect, onView, onEdit }: ProductC
         </div>
 
         {/* Product Image/Icon */}
-        <div className="h-40 bg-primary/10 flex items-center justify-center">
+        <div className="h-40 bg-primary/10 flex items-center justify-center relative overflow-hidden">
           {product.image ? (
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              onError={(e) => {
+                // Fallback if image fails to load
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              }}
             />
-          ) : (
-            <Package className="w-16 h-16 text-muted-foreground/50" />
-          )}
+          ) : null}
+          <div className={`flex items-center justify-center w-full h-full ${product.image ? 'hidden' : ''}`}>
+            <ImageIcon className="w-16 h-16 text-muted-foreground/50" />
+          </div>
         </div>
 
         <CardContent className="p-4 space-y-3">

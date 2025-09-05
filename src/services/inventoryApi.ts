@@ -49,9 +49,9 @@ export class InventoryApiService {
           productCode: product.sku, // Use SKU as product code
           category: product.category,
           price: product.price,
-          stock: product.stock?.current || product.stock || 0,
-          minStock: product.stock?.minimum || product.minStock || 0,
-          maxStock: product.stock?.maximum || product.maxStock || 0,
+          stock: typeof product.stock === 'object' ? (product.stock?.current || 0) : (product.stock || 0),
+          minStock: typeof product.stock === 'object' ? (product.stock?.minimum || 0) : (product.minStock || 0),
+          maxStock: typeof product.stock === 'object' ? (product.stock?.maximum || 0) : (product.maxStock || 0),
           status: product.stockStatus || product.status || 'active',
           description: product.description || '',
           location: product.location?.warehouse || product.location || '',

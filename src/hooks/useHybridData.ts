@@ -302,13 +302,13 @@ export function useHybridInventoryItems() {
           name: product.name,
           code: product.sku || product.productCode,
           category: product.category,
-          currentStock: product.stock,
-          minStock: product.minStock || 10,
-          maxStock: product.maxStock || 100,
+          currentStock: typeof product.stock === 'object' ? (product.stock?.current || 0) : (product.stock || 0),
+          minStock: typeof product.stock === 'object' ? (product.stock?.minimum || 10) : (product.minStock || 10),
+          maxStock: typeof product.stock === 'object' ? (product.stock?.maximum || 100) : (product.maxStock || 100),
           location: product.location || 'Gudang Utama',
           lastMovement: new Date(product.updatedAt || Date.now()),
           status: product.status,
-          value: product.price * product.stock,
+          value: (product.price || 0) * (typeof product.stock === 'object' ? (product.stock?.current || 0) : (product.stock || 0)),
           unit: 'pcs'
         }));
       }

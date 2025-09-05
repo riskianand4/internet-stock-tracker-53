@@ -56,7 +56,7 @@ const StockReportsManager = () => {
     };
 
     loadData();
-  }, [isConfigured, isOnline, apiService, toast]);
+  }, [isConfigured, isOnline]);
 
   // Generate stock report data
   const stockReportData = useMemo(() => {

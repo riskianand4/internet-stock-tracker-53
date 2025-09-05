@@ -49,20 +49,39 @@ const ProductsManager = () => {
   // Filter and sort products
   const filteredProducts = useMemo(() => {
     let filtered = [...products];
+    
+    console.log('🔍 Filtering products:', { 
+      totalProducts: products.length, 
+      searchQuery, 
+      categoryFilter, 
+      statusFilter,
+      firstProduct: products[0]
+    });
 
     // Apply search filter
     if (searchQuery) {
       filtered = filtered.filter(product => product.name.toLowerCase().includes(searchQuery.toLowerCase()) || product.sku.toLowerCase().includes(searchQuery.toLowerCase()) || product.category.toLowerCase().includes(searchQuery.toLowerCase()));
+      console.log('📝 After search filter:', filtered.length);
     }
 
     // Apply category filter
     if (categoryFilter !== 'all') {
       filtered = filtered.filter(product => product.category === categoryFilter);
+      console.log('📂 After category filter:', filtered.length);
     }
 
     // Apply status filter
     if (statusFilter !== 'all') {
-      filtered = filtered.filter(product => product.status === statusFilter);
+      filtered = filtered.filter(product => {
+        console.log('🏷️ Product status check:', { 
+          productName: product.name, 
+          productStatus: product.status, 
+          filterStatus: statusFilter,
+          matches: product.status === statusFilter 
+        });
+        return product.status === statusFilter;
+      });
+      console.log('🎯 After status filter:', filtered.length);
     }
 
     // Apply sorting
@@ -82,8 +101,10 @@ const ProductsManager = () => {
           return 0;
       }
     });
+    
+    console.log('✅ Final filtered products:', filtered.length, filtered);
     return filtered;
-  }, [searchQuery, categoryFilter, statusFilter, sortBy]);
+  }, [products, searchQuery, categoryFilter, statusFilter, sortBy]);
   const handleBulkAction = (action: string) => {
     if (selectedProducts.length === 0) return;
     switch (action) {

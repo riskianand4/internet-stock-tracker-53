@@ -84,6 +84,26 @@ export class InventoryApiService {
       
     } catch (error) {
       console.error('❌ Error fetching products:', error);
+      
+      // Handle 401 errors specifically
+      if (error instanceof Error && error.message.includes('Authentication required')) {
+        // Try to refresh token and retry once
+        const token = localStorage.getItem('auth-token');
+        if (token) {
+          // Set token again in case it was cleared
+          apiClient.setToken(token);
+          try {
+            const retryResponse = await apiClient.get(`/api/products${queryString}`);
+            if (retryResponse?.success) {
+              console.log('✅ Retry successful after token refresh');
+              return this.getProducts(params); // Recursive call to process the data
+            }
+          } catch (retryError) {
+            console.error('❌ Retry failed:', retryError);
+          }
+        }
+      }
+      
       return {
         success: false,
         data: [],

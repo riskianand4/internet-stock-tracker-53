@@ -92,14 +92,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       tokenPreview: token ? `${token.substring(0, 20)}...` : 'none'
     });
     
-    if (token && authManager.isAuthenticated) {
-      apiService.setToken(token);
+    // Always sync token regardless of auth state to prevent race conditions
+    apiService.setToken(token);
+    if (token) {
       console.log('✅ Token set in API service');
     } else {
-      apiService.setToken(null);
       console.log('❌ Token cleared from API service');
     }
-  }, [authManager.isAuthenticated, apiService]);
+  }, [authManager.isAuthenticated, authManager.user, apiService]);
+
+  // Additional token sync on storage changes (for cross-tab synchronization)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const token = localStorage.getItem('auth-token');
+      apiService.setToken(token);
+      console.log('🔄 Token synced from storage change:', !!token);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [apiService]);
 
   const setConfig = (newConfig: Partial<AppConfig>) => {
     const updatedConfig = { ...config, ...newConfig };

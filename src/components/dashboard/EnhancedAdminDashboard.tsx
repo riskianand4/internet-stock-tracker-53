@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Package, Users, BarChart3, AlertTriangle, TrendingUp, ArrowUpRight, CheckCircle, Clock, FileText, ShoppingCart, Truck } from 'lucide-react';
+import { Plus, Package, Users, BarChart3, AlertTriangle, TrendingUp, ArrowUpRight, CheckCircle, Clock, FileText, ShoppingCart, Truck, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import WelcomeCard from '@/components/onboarding/WelcomeCard';
 import { User } from '@/types/auth';
 import { motion } from 'framer-motion';
+import { useDashboardData } from '@/hooks/useDashboardData';
+import { useToast } from '@/hooks/use-toast';
 
 interface EnhancedAdminDashboardProps {
   user: User;
@@ -14,6 +16,19 @@ interface EnhancedAdminDashboardProps {
 }
 
 const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ user, onStartTour }) => {
+  const { toast } = useToast();
+  const {
+    stats,
+    pendingApprovals,
+    recentActivities,
+    inventoryHealth,
+    loading,
+    error,
+    refreshData,
+    handleApprove,
+    handleReject
+  } = useDashboardData();
+
   const quickActions = [
     {
       title: 'Add New Product',
@@ -45,49 +60,44 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ user, o
     }
   ];
 
-  const adminStats = [
-    { label: 'Active Users', value: '45', icon: Users, trend: '+3', status: 'good' },
-    { label: 'Products Managed', value: '1,247', icon: Package, trend: '+87', status: 'excellent' },
-    { label: 'Pending Approvals', value: '12', icon: Clock, trend: '+4', status: 'warning' },
-    { label: 'Low Stock Items', value: '8', icon: AlertTriangle, trend: '-2', status: 'critical' }
-  ];
+  const adminStats = stats ? [
+    { label: 'Active Users', value: stats.activeUsers.toString(), icon: Users, trend: stats.usersTrend, status: 'good' },
+    { label: 'Products Managed', value: stats.productsManaged.toLocaleString(), icon: Package, trend: stats.productsTrend, status: 'excellent' },
+    { label: 'Pending Approvals', value: stats.pendingApprovals.toString(), icon: Clock, trend: stats.approvalsTrend, status: 'warning' },
+    { label: 'Low Stock Items', value: stats.lowStockItems.toString(), icon: AlertTriangle, trend: stats.stockTrend, status: 'critical' }
+  ] : [];
 
-  const pendingApprovals = [
-    { 
-      id: 'SA-001', 
-      type: 'Stock Adjustment', 
-      product: 'Set Top Box Telnet TV',
-      quantity: 50,
-      requestedBy: 'John Doe',
-      time: '2 hours ago',
-      priority: 'high'
-    },
-    { 
-      id: 'SA-002', 
-      type: 'Stock Adjustment', 
-      product: 'Fiber Optic Cable',
-      quantity: -25,
-      requestedBy: 'Jane Smith', 
-      time: '4 hours ago',
-      priority: 'medium'
-    },
-    { 
-      id: 'PO-003', 
-      type: 'Purchase Order', 
-      product: 'Network Switch',
-      quantity: 10,
-      requestedBy: 'Admin System',
-      time: '1 day ago',
-      priority: 'low'
+  const handleApproveWithToast = async (id: string) => {
+    try {
+      await handleApprove(id);
+      toast({
+        title: "Request Approved",
+        description: "The request has been successfully approved.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to approve request. Please try again.",
+        variant: "destructive",
+      });
     }
-  ];
+  };
 
-  const recentActivities = [
-    { message: 'Stock adjustment approved for Wireless Router', type: 'success', time: '10 min ago' },
-    { message: 'New vendor registration: PT Telnet Suppliers', type: 'info', time: '1 hour ago' },
-    { message: 'Low stock alert: Fiber Cable (5 remaining)', type: 'warning', time: '2 hours ago' },
-    { message: 'Bulk inventory update completed', type: 'success', time: '3 hours ago' }
-  ];
+  const handleRejectWithToast = async (id: string) => {
+    try {
+      await handleReject(id);
+      toast({
+        title: "Request Rejected",
+        description: "The request has been rejected.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to reject request. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -145,6 +155,10 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ user, o
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Admin Control Panel</h2>
           <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={refreshData} disabled={loading}>
+              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              {loading ? 'Loading...' : 'Refresh'}
+            </Button>
             <Button variant="outline" size="sm">
               <BarChart3 className="h-4 w-4 mr-2" />
               Analytics
@@ -156,6 +170,12 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ user, o
           </div>
         </div>
         
+        {error && (
+          <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm">
+            {error}
+          </div>
+        )}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {adminStats.map((stat) => (
             <Card key={stat.label} className="hover:shadow-md transition-shadow">
@@ -163,9 +183,9 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ user, o
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-                    <p className="text-2xl font-bold">{stat.value}</p>
+                    <p className="text-2xl font-bold">{loading ? '...' : stat.value}</p>
                     <p className={`text-xs ${getStatusColor(stat.status)}`}>
-                      {stat.trend} from last month
+                      {loading ? '...' : stat.trend} from last month
                     </p>
                   </div>
                   <stat.icon className={`h-8 w-8 ${getStatusColor(stat.status)}`} />
@@ -208,39 +228,61 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ user, o
                 <Clock className="h-5 w-5" />
                 Pending Approvals
                 <Badge variant="destructive" className="ml-auto">
-                  {pendingApprovals.length}
+                  {loading ? '...' : pendingApprovals.length}
                 </Badge>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {pendingApprovals.slice(0, 3).map((approval) => (
-                  <div key={approval.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 border">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <p className="text-sm font-medium">{approval.product}</p>
-                        <Badge variant="outline" className={getPriorityBadge(approval.priority)}>
-                          {approval.priority}
-                        </Badge>
+              {loading ? (
+                <div className="space-y-3">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="h-20 bg-muted/50 rounded-lg"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {pendingApprovals.slice(0, 3).map((approval) => (
+                    <div key={approval.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 border">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="text-sm font-medium">{approval.product}</p>
+                          <Badge variant="outline" className={getPriorityBadge(approval.priority)}>
+                            {approval.priority}
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          {approval.type} • {approval.quantity > 0 ? '+' : ''}{approval.quantity} units
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          by {approval.requestedBy} • {approval.time}
+                        </p>
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        {approval.type} • {approval.quantity > 0 ? '+' : ''}{approval.quantity} units
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        by {approval.requestedBy} • {approval.time}
-                      </p>
+                      <div className="flex gap-1">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="text-xs py-1 px-2 h-auto"
+                          onClick={() => handleApproveWithToast(approval.id)}
+                          disabled={loading}
+                        >
+                          Approve
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="text-xs py-1 px-2 h-auto"
+                          onClick={() => handleRejectWithToast(approval.id)}
+                          disabled={loading}
+                        >
+                          Reject
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex gap-1">
-                      <Button variant="outline" size="sm" className="text-xs py-1 px-2 h-auto">
-                        Approve
-                      </Button>
-                      <Button variant="outline" size="sm" className="text-xs py-1 px-2 h-auto">
-                        Reject
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
               <Button variant="outline" className="w-full mt-3" size="sm">
                 View All Approvals
               </Button>
@@ -257,17 +299,27 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ user, o
               <CardDescription>Latest admin actions and system events</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {recentActivities.map((activity, index) => (
-                  <div key={index} className="flex items-start gap-3 p-2 rounded-lg bg-muted/50">
-                    {getActivityIcon(activity.type)}
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">{activity.message}</p>
-                      <p className="text-xs text-muted-foreground">{activity.time}</p>
+              {loading ? (
+                <div className="space-y-3">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="h-12 bg-muted/50 rounded-lg"></div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {recentActivities.map((activity, index) => (
+                    <div key={activity.id || index} className="flex items-start gap-3 p-2 rounded-lg bg-muted/50">
+                      {getActivityIcon(activity.type)}
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{activity.message}</p>
+                        <p className="text-xs text-muted-foreground">{activity.time}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </motion.div>
@@ -279,28 +331,42 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ user, o
               <CardDescription>Key inventory metrics and health indicators</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="text-center p-4 bg-success/5 rounded-lg border border-success/20">
-                  <div className="text-2xl font-bold text-success">98.5%</div>
-                  <div className="text-sm text-muted-foreground">Stock Accuracy</div>
-                  <div className="text-xs text-success mt-1">Excellent</div>
+              {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="h-20 bg-muted/50 rounded-lg"></div>
+                    </div>
+                  ))}
                 </div>
-                <div className="text-center p-4 bg-primary/5 rounded-lg border border-primary/20">
-                  <div className="text-2xl font-bold text-primary">12.5</div>
-                  <div className="text-sm text-muted-foreground">Avg Turnover</div>
-                  <div className="text-xs text-primary mt-1">Good</div>
+              ) : inventoryHealth ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="text-center p-4 bg-success/5 rounded-lg border border-success/20">
+                    <div className="text-2xl font-bold text-success">{inventoryHealth.stockAccuracy}%</div>
+                    <div className="text-sm text-muted-foreground">Stock Accuracy</div>
+                    <div className="text-xs text-success mt-1">Excellent</div>
+                  </div>
+                  <div className="text-center p-4 bg-primary/5 rounded-lg border border-primary/20">
+                    <div className="text-2xl font-bold text-primary">{inventoryHealth.avgTurnover}</div>
+                    <div className="text-sm text-muted-foreground">Avg Turnover</div>
+                    <div className="text-xs text-primary mt-1">Good</div>
+                  </div>
+                  <div className="text-center p-4 bg-warning/5 rounded-lg border border-warning/20">
+                    <div className="text-2xl font-bold text-warning">{inventoryHealth.lowStockCount}</div>
+                    <div className="text-sm text-muted-foreground">Low Stock</div>
+                    <div className="text-xs text-warning mt-1">Need Attention</div>
+                  </div>
+                  <div className="text-center p-4 bg-accent/5 rounded-lg border border-accent/20">
+                    <div className="text-2xl font-bold text-accent">{inventoryHealth.activeSKUs}</div>
+                    <div className="text-sm text-muted-foreground">Active SKUs</div>
+                    <div className="text-xs text-accent mt-1">{inventoryHealth.skusTrend}</div>
+                  </div>
                 </div>
-                <div className="text-center p-4 bg-warning/5 rounded-lg border border-warning/20">
-                  <div className="text-2xl font-bold text-warning">8</div>
-                  <div className="text-sm text-muted-foreground">Low Stock</div>
-                  <div className="text-xs text-warning mt-1">Need Attention</div>
+              ) : (
+                <div className="text-center p-4 text-muted-foreground">
+                  No inventory health data available
                 </div>
-                <div className="text-center p-4 bg-accent/5 rounded-lg border border-accent/20">
-                  <div className="text-2xl font-bold text-accent">247</div>
-                  <div className="text-sm text-muted-foreground">Active SKUs</div>
-                  <div className="text-xs text-accent mt-1">+15 this month</div>
-                </div>
-              </div>
+              )}
             </CardContent>
           </Card>
         </motion.div>

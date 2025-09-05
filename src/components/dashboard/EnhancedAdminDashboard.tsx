@@ -182,16 +182,16 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ user, o
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {quickActions.map((action) => (
               <motion.div key={action.title} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Card className={`cursor-pointer transition-all duration-200 ${action.color}`}>
-                  <Link to={action.href}>
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start gap-3">
-                        <action.icon className="h-5 w-5 mt-0.5" />
-                        <div className="flex-1">
-                          <CardTitle className="text-base">{action.title}</CardTitle>
-                          <CardDescription className="text-xs">{action.description}</CardDescription>
+                <Card className={`cursor-pointer transition-all duration-200 h-full ${action.color}`}>
+                  <Link to={action.href} className="block h-full">
+                    <CardHeader className="p-4 h-full">
+                      <div className="flex items-center gap-3 h-full">
+                        <action.icon className="h-5 w-5 flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <CardTitle className="text-base leading-tight mb-1">{action.title}</CardTitle>
+                          <CardDescription className="text-xs leading-tight">{action.description}</CardDescription>
                         </div>
-                        <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
+                        <ArrowUpRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                       </div>
                     </CardHeader>
                   </Link>

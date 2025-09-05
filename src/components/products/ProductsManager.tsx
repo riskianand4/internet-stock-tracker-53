@@ -282,6 +282,7 @@ const ProductsManager = () => {
                     <SelectItem value="in_stock">Tersedia</SelectItem>
                     <SelectItem value="low_stock">Stok Menipis</SelectItem>
                     <SelectItem value="out_of_stock">Stok Habis</SelectItem>
+                    <SelectItem value="active">Aktif</SelectItem>
                   </SelectContent>
                 </Select>
 

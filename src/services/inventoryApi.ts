@@ -52,7 +52,7 @@ export class InventoryApiService {
           stock: typeof product.stock === 'object' ? (product.stock?.current || 0) : (product.stock || 0),
           minStock: typeof product.stock === 'object' ? (product.stock?.minimum || 0) : (product.minStock || 0),
           maxStock: typeof product.stock === 'object' ? (product.stock?.maximum || 0) : (product.maxStock || 0),
-          status: product.stockStatus || product.status || 'active',
+          status: product.stockStatus || product.status || 'in_stock',
           description: product.description || '',
           location: product.location?.warehouse || product.location || '',
           supplier: product.supplier?.name || product.supplier || '',

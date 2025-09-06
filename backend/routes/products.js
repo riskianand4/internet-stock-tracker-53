@@ -92,6 +92,7 @@ router.post('/', adminAuth, [
   body('category').notEmpty().withMessage('Category is required'),
   body('price').isNumeric().withMessage('Price must be a number'),
   body('stock.minimum').optional().isNumeric().withMessage('Minimum stock must be a number'),
+  body('image').optional().isURL().withMessage('Image must be a valid URL'),
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -141,6 +142,7 @@ router.post('/', adminAuth, [
 router.put('/:id', adminAuth, [
   body('name').optional().notEmpty().withMessage('Product name cannot be empty'),
   body('price').optional().isNumeric().withMessage('Price must be a number'),
+  body('image').optional().isURL().withMessage('Image must be a valid URL'),
 ], async (req, res) => {
   try {
     const errors = validationResult(req);

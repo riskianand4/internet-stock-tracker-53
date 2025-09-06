@@ -87,6 +87,19 @@ const productSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  // Single image URL (for compatibility with frontend)
+  image: {
+    type: String,
+    trim: true,
+    validate: {
+      validator: function(v) {
+        if (!v) return true; // Allow empty
+        return /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp)$/i.test(v);
+      },
+      message: 'Image must be a valid URL ending with jpg, jpeg, png, gif, or webp'
+    }
+  },
+  // Multiple images array (for advanced usage)
   images: [{
     url: String,
     alt: String,

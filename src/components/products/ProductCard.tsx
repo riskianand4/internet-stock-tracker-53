@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useApp } from '@/contexts/AppContext';
 import { Product } from '@/types/inventory';
 
 interface ProductCardProps {
@@ -24,6 +25,8 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, isSelected, onSelect, onView, onEdit }: ProductCardProps) => {
+  const { user } = useApp();
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
   const [isHovered, setIsHovered] = useState(false);
 
   const getStatusColor = (status: string) => {
@@ -56,11 +59,14 @@ const ProductCard = ({ product, isSelected, onSelect, onView, onEdit }: ProductC
       <Card className="glass hover-lift border-border/50 overflow-hidden group">
         {/* Header with checkbox and menu */}
         <div className="absolute top-3 left-3 right-3 flex justify-between items-center z-10">
-          <Checkbox
-            checked={isSelected}
-            onCheckedChange={onSelect}
-            className="bg-background/80 backdrop-blur-sm"
-          />
+          {isAdmin && (
+            <Checkbox
+              checked={isSelected}
+              onCheckedChange={onSelect}
+              className="bg-background/80 backdrop-blur-sm"
+            />
+          )}
+          {!isAdmin && <div />}
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -77,15 +83,19 @@ const ProductCard = ({ product, isSelected, onSelect, onView, onEdit }: ProductC
                 <Eye className="mr-2 h-4 w-4" />
                 Lihat Detail
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onEdit?.(product)}>
-                <Edit className="mr-2 h-4 w-4" />
-                Edit Produk
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
-                <Trash2 className="mr-2 h-4 w-4" />
-                Hapus Produk
-              </DropdownMenuItem>
+              {isAdmin && onEdit && (
+                <>
+                  <DropdownMenuItem onClick={() => onEdit?.(product)}>
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit Produk
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="text-destructive">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Hapus Produk
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

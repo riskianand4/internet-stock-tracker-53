@@ -13,11 +13,15 @@ import AddProductDialog from './AddProductDialog';
 import ProductDetailModal from './ProductDetailModal';
 import ProductFilters from './ProductFilters';
 import { useProductManager } from '@/hooks/useProductManager';
+import { useApp } from '@/contexts/AppContext';
 import { Product } from '@/types/inventory';
 import * as XLSX from 'xlsx';
 export type ViewMode = 'grid' | 'table';
 export type SortOption = 'name' | 'price' | 'stock' | 'category' | 'updated';
 const ProductsManager = () => {
+  const { user } = useApp();
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -211,18 +215,28 @@ const ProductsManager = () => {
           </div>
           
           <div className="flex flex-wrap items-center gap-2 md:gap-3">
-            <Button variant="outline" onClick={handleImport} size="sm" className="flex-1 md:flex-none">
-              <Upload className="w-4 h-4 md:mr-2" />
-              <span className="hidden md:inline ml-2">Import</span>
-            </Button>
-            <Button variant="outline" onClick={handleExport} size="sm" className="flex-1 md:flex-none">
-              <Download className="w-4 h-4 md:mr-2" />
-              <span className="hidden md:inline ml-2">Export</span>
-            </Button>
-            <Button onClick={() => setIsAddDialogOpen(true)} size="sm" className="flex-1 md:flex-none">
-              <Plus className="w-4 h-4 md:mr-2" />
-              <span className="hidden md:inline ml-2">Tambah</span>
-            </Button>
+            {isAdmin && (
+              <>
+                <Button variant="outline" onClick={handleImport} size="sm" className="flex-1 md:flex-none">
+                  <Upload className="w-4 h-4 md:mr-2" />
+                  <span className="hidden md:inline ml-2">Import</span>
+                </Button>
+                <Button variant="outline" onClick={handleExport} size="sm" className="flex-1 md:flex-none">
+                  <Download className="w-4 h-4 md:mr-2" />
+                  <span className="hidden md:inline ml-2">Export</span>
+                </Button>
+                <Button onClick={() => setIsAddDialogOpen(true)} size="sm" className="flex-1 md:flex-none">
+                  <Plus className="w-4 h-4 md:mr-2" />
+                  <span className="hidden md:inline ml-2">Tambah</span>
+                </Button>
+              </>
+            )}
+            {!isAdmin && (
+              <Button variant="outline" onClick={handleExport} size="sm" className="flex-1 md:flex-none">
+                <Download className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:inline ml-2">Export</span>
+              </Button>
+            )}
           </div>
         </div>
 
@@ -337,7 +351,7 @@ const ProductsManager = () => {
                 {isFromApi && <span className="ml-2 text-primary">(dari API)</span>}
               </p>
               
-              {selectedProducts.length > 0 && <div className="flex items-center gap-2">
+              {selectedProducts.length > 0 && isAdmin && <div className="flex items-center gap-2">
                   <Badge variant="secondary">
                     {selectedProducts.length} dipilih
                   </Badge>
@@ -374,15 +388,15 @@ const ProductsManager = () => {
           }} transition={{
             delay: index * 0.05
           }} className="flex-shrink-0 w-64 md:w-auto snap-start md:snap-align-none">
-                  <ProductCard product={product} isSelected={selectedProducts.includes(product.id)} onSelect={selected => {
-              if (selected) {
-                setSelectedProducts(prev => [...prev, product.id]);
-              } else {
-                setSelectedProducts(prev => prev.filter(id => id !== product.id));
-              }
-            }} onView={handleViewProduct} onEdit={handleEditProduct} />
+                  <ProductCard product={product} isSelected={isAdmin ? selectedProducts.includes(product.id) : false} onSelect={isAdmin ? (selected) => {
+                    if (selected) {
+                      setSelectedProducts(prev => [...prev, product.id]);
+                    } else {
+                      setSelectedProducts(prev => prev.filter(id => id !== product.id));
+                    }
+                  } : () => {}} onView={handleViewProduct} onEdit={isAdmin ? handleEditProduct : undefined} />
                 </motion.div>)}
-            </div> : <ProductTable products={filteredProducts} selectedProducts={selectedProducts} onSelectionChange={setSelectedProducts} onView={handleViewProduct} onEdit={handleEditProduct} />}
+            </div> : <ProductTable products={filteredProducts} selectedProducts={isAdmin ? selectedProducts : []} onSelectionChange={isAdmin ? setSelectedProducts : () => {}} onView={handleViewProduct} onEdit={isAdmin ? handleEditProduct : undefined} />}
 
           {filteredProducts.length === 0 && <Card className="glass">
               <CardContent className="p-12 text-center">

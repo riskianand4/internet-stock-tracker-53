@@ -26,6 +26,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useProductManager } from '@/hooks/useProductManager';
+import { useApp } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
 
 const editProductSchema = z.object({
@@ -67,6 +68,8 @@ interface ProductDetailModalProps {
 }
 
 const ProductDetailModal = ({ product, open, onOpenChange, mode, onModeChange }: ProductDetailModalProps) => {
+  const { user } = useApp();
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
   const { toast } = useToast();
   const { updateProduct, isLoading } = useProductManager();
   
@@ -175,15 +178,17 @@ const ProductDetailModal = ({ product, open, onOpenChange, mode, onModeChange }:
             <div className="flex items-center gap-2">
               {getStatusBadge(product.status)}
               {mode === 'view' ? (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onModeChange('edit')}
-                  className="gap-2"
-                >
-                  <Edit3 className="w-4 h-4" />
-                  Edit
-                </Button>
+                isAdmin && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onModeChange('edit')}
+                    className="gap-2"
+                  >
+                    <Edit3 className="w-4 h-4" />
+                    Edit
+                  </Button>
+                )
               ) : (
                 <Button
                   variant="outline"

@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useApp } from '@/contexts/AppContext';
 import { Product } from '@/types/inventory';
 
 interface ProductTableProps {
@@ -32,6 +33,8 @@ interface ProductTableProps {
 }
 
 const ProductTable = ({ products, selectedProducts, onSelectionChange, onView, onEdit, onDelete }: ProductTableProps) => {
+  const { user } = useApp();
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
@@ -118,12 +121,14 @@ const ProductTable = ({ products, selectedProducts, onSelectionChange, onView, o
         <Table>
           <TableHeader>
             <TableRow className="border-border/50">
-              <TableHead className="w-12">
-                <Checkbox
-                  checked={isAllSelected}
-                  onCheckedChange={handleSelectAll}
-                />
-              </TableHead>
+              {isAdmin && (
+                <TableHead className="w-12">
+                  <Checkbox
+                    checked={isAllSelected}
+                    onCheckedChange={handleSelectAll}
+                  />
+                </TableHead>
+              )}
               <TableHead className="min-w-[200px]">
                 <Button variant="ghost" className="h-auto p-0 font-medium">
                   Produk
@@ -185,12 +190,14 @@ const ProductTable = ({ products, selectedProducts, onSelectionChange, onView, o
                   key={product.id} 
                   className={`border-border/50 hover:bg-muted/50 ${isSelected ? 'bg-primary/5' : ''}`}
                 >
-                  <TableCell>
-                    <Checkbox
-                      checked={isSelected}
-                      onCheckedChange={(checked) => handleSelectProduct(product.id, checked as boolean)}
-                    />
-                  </TableCell>
+                  {isAdmin && (
+                    <TableCell>
+                      <Checkbox
+                        checked={isSelected}
+                        onCheckedChange={(checked) => handleSelectProduct(product.id, checked as boolean)}
+                      />
+                    </TableCell>
+                  )}
                   
                   <TableCell>
                     <div className="flex items-center gap-3">
@@ -276,24 +283,28 @@ const ProductTable = ({ products, selectedProducts, onSelectionChange, onView, o
                           <MoreVertical className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                       <DropdownMenuContent align="end" className="bg-background border shadow-lg z-50">
-                         <DropdownMenuItem onClick={() => handleViewProduct(product)}>
-                           <Eye className="mr-2 h-4 w-4" />
-                           Lihat Detail
-                         </DropdownMenuItem>
-                         <DropdownMenuItem onClick={() => handleEditProduct(product)}>
-                           <Edit className="mr-2 h-4 w-4" />
-                           Edit Produk
-                         </DropdownMenuItem>
-                         <DropdownMenuSeparator />
-                          <DropdownMenuItem 
-                            onClick={() => handleDeleteClick(product)}
-                            className="text-destructive focus:text-destructive"
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Hapus Produk
+                        <DropdownMenuContent align="end" className="bg-background border shadow-lg z-50">
+                          <DropdownMenuItem onClick={() => handleViewProduct(product)}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            Lihat Detail
                           </DropdownMenuItem>
-                       </DropdownMenuContent>
+                          {isAdmin && onEdit && (
+                            <>
+                              <DropdownMenuItem onClick={() => handleEditProduct(product)}>
+                                <Edit className="mr-2 h-4 w-4" />
+                                Edit Produk
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem 
+                                onClick={() => handleDeleteClick(product)}
+                                className="text-destructive focus:text-destructive"
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Hapus Produk
+                              </DropdownMenuItem>
+                            </>
+                          )}
+                        </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
                 </TableRow>

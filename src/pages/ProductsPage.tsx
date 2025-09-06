@@ -3,7 +3,6 @@ import { useApp } from '@/contexts/AppContext';
 import ModernLoginPage from '@/components/auth/ModernLoginPage';
 import MainLayout from '@/components/layout/MainLayout';
 import ProductsManager from '@/components/products/ProductsManager';
-import { ErrorBoundary } from '@/components/feedback/ErrorBoundary';
 
 const ProductsPage = () => {
   const { user, isAuthenticated } = useApp();
@@ -13,11 +12,9 @@ const ProductsPage = () => {
   }
 
   return (
-    <ErrorBoundary>
-      <MainLayout>
-        <ProductsManager />
-      </MainLayout>
-    </ErrorBoundary>
+    <MainLayout>
+      <ProductsManager />
+    </MainLayout>
   );
 };
 

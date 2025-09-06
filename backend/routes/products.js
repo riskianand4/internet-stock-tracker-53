@@ -138,8 +138,8 @@ router.post('/', adminAuth, [
 
 // @desc    Update product
 // @route   PUT /api/products/:id
-// @access  Private (Admin)
-router.put('/:id', adminAuth, [
+// @access  Private (User can update own products, Admin can update all)
+router.put('/:id', auth, [
   body('name').optional().notEmpty().withMessage('Product name cannot be empty'),
   body('price').optional().isNumeric().withMessage('Price must be a number'),
   body('image').optional().isURL().withMessage('Image must be a valid URL'),

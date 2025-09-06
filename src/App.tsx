@@ -2,7 +2,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Routes, Route } from "react-router-dom";
 
 import { ScrollRestoration } from "./components/ScrollRestoration";
-import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { ErrorBoundary } from '@/components/feedback/ErrorBoundary';
 import Index from "./pages/Index";
 import StatsPage from "./pages/StatsPage";
 import ProductsPage from "./pages/ProductsPage";

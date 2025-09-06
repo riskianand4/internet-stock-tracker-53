@@ -54,6 +54,7 @@ export class InventoryApiService {
           maxStock: typeof product.stock === 'object' ? (product.stock?.maximum || 0) : (product.maxStock || 0),
           status: product.stockStatus || product.status || 'in_stock',
           description: product.description || '',
+          image: product.image || '',
           location: product.location?.warehouse || product.location || '',
           supplier: product.supplier?.name || product.supplier || '',
           unit: product.unit || 'pcs',

@@ -14,6 +14,7 @@ interface Product {
   minStock: number;
   status: 'in_stock' | 'low_stock' | 'out_of_stock';
   description?: string;
+  image?: string;
   location?: string;
   supplier?: string;
   createdAt: string;

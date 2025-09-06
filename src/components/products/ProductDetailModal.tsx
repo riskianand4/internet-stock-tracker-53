@@ -36,6 +36,7 @@ const editProductSchema = z.object({
   description: z.string().default(''),
   location: z.string().default(''),
   supplier: z.string().default(''),
+  image: z.string().url('URL gambar tidak valid').optional().or(z.literal('')),
 });
 
 type EditProductFormData = z.infer<typeof editProductSchema>;
@@ -52,6 +53,7 @@ interface Product {
   description?: string;
   location?: string;
   supplier?: string;
+  image?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -78,6 +80,7 @@ const ProductDetailModal = ({ product, open, onOpenChange, mode, onModeChange }:
       description: product?.description || '',
       location: product?.location || '',
       supplier: product?.supplier || '',
+      image: product?.image || '',
     },
   });
 
@@ -92,6 +95,7 @@ const ProductDetailModal = ({ product, open, onOpenChange, mode, onModeChange }:
         description: product.description || '',
         location: product.location || '',
         supplier: product.supplier || '',
+        image: product.image || '',
       });
     }
   }, [product, form]);
@@ -252,6 +256,22 @@ const ProductDetailModal = ({ product, open, onOpenChange, mode, onModeChange }:
                         {product.supplier || 'No supplier specified'}
                       </p>
                     </div>
+                    {product.image && (
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Product Image</label>
+                        <div className="mt-2">
+                          <img 
+                            src={product.image} 
+                            alt={product.name}
+                            className="w-32 h-32 object-cover rounded-lg border"
+                            onError={(e) => {
+                              e.currentTarget.src = '';
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </div>
@@ -370,6 +390,36 @@ const ProductDetailModal = ({ product, open, onOpenChange, mode, onModeChange }:
                           />
                         </FormControl>
                         <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Product Image (URL)</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="https://example.com/image.jpg"
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                        {field.value && (
+                          <div className="mt-2">
+                            <img 
+                              src={field.value} 
+                              alt="Preview" 
+                              className="w-24 h-24 object-cover rounded-md border"
+                              onError={(e) => {
+                                e.currentTarget.src = '';
+                                e.currentTarget.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        )}
                       </FormItem>
                     )}
                   />

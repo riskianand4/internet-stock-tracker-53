@@ -94,9 +94,9 @@ const productSchema = new mongoose.Schema({
     validate: {
       validator: function(v) {
         if (!v) return true; // Allow empty
-        return /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp)$/i.test(v);
+        return /^https?:\/\/.+/.test(v);
       },
-      message: 'Image must be a valid URL ending with jpg, jpeg, png, gif, or webp'
+      message: 'Image must be a valid URL'
     }
   },
   // Multiple images array (for advanced usage)

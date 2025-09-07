@@ -125,7 +125,7 @@ const SupplierPerformance = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Total Suppliers</p>
-                  <p className="text-2xl font-bold">{totalMetrics.totalSuppliers}</p>
+                  <p className="text-md font-bold">{totalMetrics.totalSuppliers}</p>
                 </div>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                   <Users className="w-6 h-6 text-blue-600" />
@@ -145,7 +145,7 @@ const SupplierPerformance = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Avg On-Time</p>
-                  <p className="text-2xl font-bold text-green-600">{totalMetrics.avgOnTimePercentage.toFixed(1)}%</p>
+                  <p className="text-md font-bold text-green-600">{totalMetrics.avgOnTimePercentage.toFixed(1)}%</p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                   <CheckCircle className="w-6 h-6 text-green-600" />
@@ -165,7 +165,7 @@ const SupplierPerformance = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Avg Quality</p>
-                  <p className="text-2xl font-bold text-yellow-600">{totalMetrics.avgQualityRating.toFixed(1)}/5</p>
+                  <p className="text-md font-bold text-yellow-600">{totalMetrics.avgQualityRating.toFixed(1)}/5</p>
                 </div>
                 <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
                   <Star className="w-6 h-6 text-yellow-600" />
@@ -185,7 +185,7 @@ const SupplierPerformance = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Total Value</p>
-                  <p className="text-xl font-bold">{formatCurrency(totalMetrics.totalValue)}</p>
+                  <p className="text-sm font-bold">{formatCurrency(totalMetrics.totalValue)}</p>
                 </div>
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                   <TrendingUp className="w-6 h-6 text-purple-600" />

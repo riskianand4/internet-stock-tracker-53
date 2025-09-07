@@ -88,7 +88,7 @@ const AutomatedStockAlerts = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Total Alerts</p>
-                  <p className="text-2xl font-bold">{stats.total}</p>
+                  <p className="text-md font-bold">{stats.total}</p>
                 </div>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                   <Bell className="w-6 h-6 text-blue-600" />
@@ -108,7 +108,7 @@ const AutomatedStockAlerts = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Critical</p>
-                  <p className="text-2xl font-bold text-red-600">{stats.critical}</p>
+                  <p className="text-md font-bold text-red-600">{stats.critical}</p>
                 </div>
                 <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                   <AlertCircle className="w-6 h-6 text-red-600" />
@@ -128,7 +128,7 @@ const AutomatedStockAlerts = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">High Priority</p>
-                  <p className="text-2xl font-bold text-orange-600">{stats.high}</p>
+                  <p className="text-md font-bold text-orange-600">{stats.high}</p>
                 </div>
                 <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
                   <AlertTriangle className="w-6 h-6 text-orange-600" />
@@ -148,7 +148,7 @@ const AutomatedStockAlerts = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Medium Priority</p>
-                  <p className="text-2xl font-bold text-yellow-600">{stats.medium}</p>
+                  <p className="text-md font-bold text-yellow-600">{stats.medium}</p>
                 </div>
                 <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
                   <Clock className="w-6 h-6 text-yellow-600" />
@@ -168,7 +168,7 @@ const AutomatedStockAlerts = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Unacknowledged</p>
-                  <p className="text-2xl font-bold">{stats.unacknowledged}</p>
+                  <p className="text-md font-bold">{stats.unacknowledged}</p>
                 </div>
                 <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                   <BellOff className="w-6 h-6 text-gray-600" />

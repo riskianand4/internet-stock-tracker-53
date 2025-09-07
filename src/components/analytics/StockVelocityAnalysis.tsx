@@ -111,7 +111,7 @@ const StockVelocityAnalysis = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Fast Moving</p>
-                  <p className="text-2xl font-bold text-green-600">{velocityStats.fast}</p>
+                  <p className="text-md font-bold text-green-600">{velocityStats.fast}</p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                   <Zap className="w-6 h-6 text-green-600" />
@@ -131,7 +131,7 @@ const StockVelocityAnalysis = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Medium Moving</p>
-                  <p className="text-2xl font-bold text-yellow-600">{velocityStats.medium}</p>
+                  <p className="text-md font-bold text-yellow-600">{velocityStats.medium}</p>
                 </div>
                 <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
                   <Activity className="w-6 h-6 text-yellow-600" />
@@ -151,7 +151,7 @@ const StockVelocityAnalysis = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Slow Moving</p>
-                  <p className="text-2xl font-bold text-orange-600">{velocityStats.slow}</p>
+                  <p className="text-md font-bold text-orange-600">{velocityStats.slow}</p>
                 </div>
                 <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
                   <Clock className="w-6 h-6 text-orange-600" />
@@ -171,7 +171,7 @@ const StockVelocityAnalysis = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Dead Stock</p>
-                  <p className="text-2xl font-bold text-red-600">{velocityStats.dead}</p>
+                  <p className="text-md font-bold text-red-600">{velocityStats.dead}</p>
                 </div>
                 <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                   <AlertCircle className="w-6 h-6 text-red-600" />

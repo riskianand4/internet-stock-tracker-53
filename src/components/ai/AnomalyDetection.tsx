@@ -184,7 +184,7 @@ const AnomalyDetection = () => {
               <AlertTriangle className="h-4 w-4 text-destructive" />
               <span className="text-sm font-medium">Critical</span>
             </div>
-            <div className="text-2xl font-bold">
+            <div className="text-md font-bold">
               {anomalies.filter(a => a.severity === 'critical').length}
             </div>
           </CardContent>
@@ -195,7 +195,7 @@ const AnomalyDetection = () => {
               <TrendingUp className="h-4 w-4 text-warning" />
               <span className="text-sm font-medium">High</span>
             </div>
-            <div className="text-2xl font-bold">
+            <div className="text-md font-bold">
               {anomalies.filter(a => a.severity === 'high').length}
             </div>
           </CardContent>
@@ -206,7 +206,7 @@ const AnomalyDetection = () => {
               <Brain className="h-4 w-4 text-primary" />
               <span className="text-sm font-medium">Confidence</span>
             </div>
-            <div className="text-2xl font-bold">
+            <div className="text-md font-bold">
               {Math.round(anomalies.reduce((sum, a) => sum + a.confidence, 0) / anomalies.length)}%
             </div>
           </CardContent>
@@ -217,7 +217,7 @@ const AnomalyDetection = () => {
               <Zap className="h-4 w-4 text-accent" />
               <span className="text-sm font-medium">Detection Rate</span>
             </div>
-            <div className="text-2xl font-bold">
+            <div className="text-md font-bold">
               {products?.length || 0}
             </div>
           </CardContent>

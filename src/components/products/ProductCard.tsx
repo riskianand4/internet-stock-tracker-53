@@ -91,7 +91,7 @@ const ProductCard = ({
           </div>
 
           {/* Price */}
-          <div className="text-lg font-bold text-primary">
+          <div className="text-sm font-bold text-primary">
             {new Intl.NumberFormat('id-ID', {
             style: 'currency',
             currency: 'IDR',

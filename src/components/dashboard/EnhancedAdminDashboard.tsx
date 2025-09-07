@@ -153,7 +153,7 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ user, o
 
       <motion.div variants={itemVariants}>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">Admin Control Panel</h2>
+          <h2 className="text-sm font-bold">Admin Control Panel</h2>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={refreshData} disabled={loading}>
               <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
@@ -183,7 +183,7 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ user, o
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-                    <p className="text-2xl font-bold">{loading ? '...' : stat.value}</p>
+                    <p className="text-md font-bold">{loading ? '...' : stat.value}</p>
                     <p className={`text-xs ${getStatusColor(stat.status)}`}>
                       {loading ? '...' : stat.trend} from last month
                     </p>
@@ -342,22 +342,22 @@ const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({ user, o
               ) : inventoryHealth ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="text-center p-4 bg-success/5 rounded-lg border border-success/20">
-                    <div className="text-2xl font-bold text-success">{inventoryHealth.stockAccuracy}%</div>
+                    <div className="text-md font-bold text-success">{inventoryHealth.stockAccuracy}%</div>
                     <div className="text-sm text-muted-foreground">Stock Accuracy</div>
                     <div className="text-xs text-success mt-1">Excellent</div>
                   </div>
                   <div className="text-center p-4 bg-primary/5 rounded-lg border border-primary/20">
-                    <div className="text-2xl font-bold text-primary">{inventoryHealth.avgTurnover}</div>
+                    <div className="text-md font-bold text-primary">{inventoryHealth.avgTurnover}</div>
                     <div className="text-sm text-muted-foreground">Avg Turnover</div>
                     <div className="text-xs text-primary mt-1">Good</div>
                   </div>
                   <div className="text-center p-4 bg-warning/5 rounded-lg border border-warning/20">
-                    <div className="text-2xl font-bold text-warning">{inventoryHealth.lowStockCount}</div>
+                    <div className="text-md font-bold text-warning">{inventoryHealth.lowStockCount}</div>
                     <div className="text-sm text-muted-foreground">Low Stock</div>
                     <div className="text-xs text-warning mt-1">Need Attention</div>
                   </div>
                   <div className="text-center p-4 bg-accent/5 rounded-lg border border-accent/20">
-                    <div className="text-2xl font-bold text-accent">{inventoryHealth.activeSKUs}</div>
+                    <div className="text-md font-bold text-accent">{inventoryHealth.activeSKUs}</div>
                     <div className="text-sm text-muted-foreground">Active SKUs</div>
                     <div className="text-xs text-accent mt-1">{inventoryHealth.skusTrend}</div>
                   </div>

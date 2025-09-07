@@ -133,7 +133,7 @@ const EnhancedDashboard = () => {
         className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
       >
         <div>
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-md font-bold text-foreground">
             {getWelcomeMessage()}, {user?.name}! 👋
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -214,7 +214,7 @@ const EnhancedDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Products</p>
-                <p className="text-2xl font-bold">{quickStats.totalProducts}</p>
+                <p className="text-md font-bold">{quickStats.totalProducts}</p>
               </div>
               <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
                 <Package className="w-5 h-5 text-primary" />
@@ -228,7 +228,7 @@ const EnhancedDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Low Stock</p>
-                <p className="text-2xl font-bold text-yellow-600">{quickStats.lowStock}</p>
+                <p className="text-md font-bold text-yellow-600">{quickStats.lowStock}</p>
               </div>
               <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
                 <AlertTriangle className="w-5 h-5 text-yellow-600" />
@@ -242,7 +242,7 @@ const EnhancedDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Out of Stock</p>
-                <p className="text-2xl font-bold text-red-600">{quickStats.outOfStock}</p>
+                <p className="text-md font-bold text-red-600">{quickStats.outOfStock}</p>
               </div>
               <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                 <AlertTriangle className="w-5 h-5 text-red-600" />
@@ -256,7 +256,7 @@ const EnhancedDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Value</p>
-                <p className="text-lg font-bold">
+                <p className="text-sm font-bold">
                   {new Intl.NumberFormat('id-ID', {
                     style: 'currency',
                     currency: 'IDR',

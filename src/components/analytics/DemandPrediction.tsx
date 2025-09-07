@@ -222,7 +222,7 @@ const DemandPrediction = () => {
                 </Badge>
               </div>
               <div className="space-y-1">
-                <div className="text-xl font-bold">{stat.value}</div>
+                <div className="text-sm font-bold">{stat.value}</div>
                 <div className="text-xs text-muted-foreground">{stat.label}</div>
               </div>
             </Card>

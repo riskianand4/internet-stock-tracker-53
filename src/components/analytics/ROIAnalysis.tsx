@@ -216,7 +216,7 @@ const ROIAnalysis = () => {
                 </Badge>
               </div>
               <div className="space-y-1">
-                <div className="text-xl font-bold">{metric.value}</div>
+                <div className="text-sm font-bold">{metric.value}</div>
                 <div className="text-xs text-muted-foreground">{metric.label}</div>
                 <div className="text-xs text-muted-foreground">{metric.subtitle}</div>
               </div>

@@ -85,7 +85,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, onStartTour }) =>
 
       <motion.div variants={itemVariants}>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">System Overview</h2>
+          <h2 className="text-sm font-bold">System Overview</h2>
           <Link to="/settings">
             <Button variant="outline" size="sm">
               <Settings className="h-4 w-4 mr-2" />
@@ -100,7 +100,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, onStartTour }) =>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-                    <p className="text-2xl font-bold">{stat.value}</p>
+                    <p className="text-md font-bold">{stat.value}</p>
                     <p className={`text-xs ${stat.color}`}>{stat.trend} from last month</p>
                   </div>
                   <stat.icon className={`h-8 w-8 ${stat.color}`} />
@@ -113,7 +113,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, onStartTour }) =>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <motion.div variants={itemVariants}>
-          <h2 className="text-xl font-bold mb-4">Quick Actions</h2>
+          <h2 className="text-sm font-bold mb-4">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {quickActions.map((action) => (
               <motion.div key={action.title} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
@@ -178,15 +178,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, onStartTour }) =>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center p-4 bg-success-light rounded-lg">
-                <div className="text-2xl font-bold text-success">98.5%</div>
+                <div className="text-md font-bold text-success">98.5%</div>
                 <div className="text-sm text-muted-foreground">Uptime</div>
               </div>
               <div className="text-center p-4 bg-primary-light rounded-lg">
-                <div className="text-2xl font-bold text-primary">1.2s</div>
+                <div className="text-md font-bold text-primary">1.2s</div>
                 <div className="text-sm text-muted-foreground">Avg Response</div>
               </div>
               <div className="text-center p-4 bg-accent-light rounded-lg">
-                <div className="text-2xl font-bold text-accent">156</div>
+                <div className="text-md font-bold text-accent">156</div>
                 <div className="text-sm text-muted-foreground">Daily Actions</div>
               </div>
             </div>

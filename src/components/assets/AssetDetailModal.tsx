@@ -102,7 +102,7 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
               {/* Basic Information */}
               <Card className="glass">
                 <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
                     <FileText className="w-5 h-5" />
                     Informasi Dasar
                   </CardTitle>
@@ -111,7 +111,7 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
                   <div className="space-y-3">
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Kode Asset</label>
-                      <p className="font-mono text-lg">{asset.code}</p>
+                      <p className="font-mono text-sm">{asset.code}</p>
                     </div>
                     
                     <div>
@@ -149,7 +149,7 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
               {/* Financial & Location Info */}
               <Card className="glass">
                 <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
                     <DollarSign className="w-5 h-5" />
                     Keuangan & Lokasi
                   </CardTitle>
@@ -160,7 +160,7 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
                       <DollarSign className="w-4 h-4 text-muted-foreground" />
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">Harga Pembelian</label>
-                        <p className="font-semibold text-lg">
+                        <p className="font-semibold text-sm">
                           {new Intl.NumberFormat('id-ID', {
                             style: 'currency',
                             currency: 'IDR',
@@ -203,7 +203,7 @@ export const AssetDetailModal: React.FC<AssetDetailModalProps> = ({
             {asset.status === 'borrowed' && asset.borrowedBy && (
               <Card className="glass border-warning/20">
                 <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2 text-warning">
+                  <CardTitle className="text-sm flex items-center gap-2 text-warning">
                     <Clock className="w-5 h-5" />
                     Status Peminjaman Saat Ini
                   </CardTitle>

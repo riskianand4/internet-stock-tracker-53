@@ -154,7 +154,7 @@ const InventoryOverview = ({
             <Package className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-primary">{stats.total}</div>
+            <div className="text-md font-bold text-primary">{stats.total}</div>
             <p className="text-xs text-muted-foreground">Item dalam inventori</p>
           </CardContent>
         </Card>
@@ -165,7 +165,7 @@ const InventoryOverview = ({
             <TrendingUp className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-success">{stats.inStock}</div>
+            <div className="text-md font-bold text-success">{stats.inStock}</div>
             <p className="text-xs text-muted-foreground">Produk dengan stok aman</p>
           </CardContent>
         </Card>
@@ -176,7 +176,7 @@ const InventoryOverview = ({
             <AlertTriangle className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-warning">{stats.lowStock + stats.outOfStock}</div>
+            <div className="text-md font-bold text-warning">{stats.lowStock + stats.outOfStock}</div>
             <p className="text-xs text-muted-foreground">Perlu perhatian segera</p>
           </CardContent>
         </Card>
@@ -187,7 +187,7 @@ const InventoryOverview = ({
             <TrendingUp className="h-4 w-4 text-info" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-info">
+            <div className="text-md font-bold text-info">
               Rp {(stats.totalValue / 1000000).toFixed(1)}M
             </div>
             <p className="text-xs text-muted-foreground">Total nilai stok</p>

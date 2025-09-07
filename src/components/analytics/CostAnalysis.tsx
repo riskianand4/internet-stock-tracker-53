@@ -94,7 +94,7 @@ const CostAnalysis = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Total Value</p>
-                  <p className="text-xl font-bold">{formatCurrency(totalMetrics.totalValue)}</p>
+                  <p className="text-sm font-bold">{formatCurrency(totalMetrics.totalValue)}</p>
                 </div>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                   <DollarSign className="w-6 h-6 text-blue-600" />
@@ -114,7 +114,7 @@ const CostAnalysis = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Total Cost</p>
-                  <p className="text-xl font-bold">{formatCurrency(totalMetrics.totalCost)}</p>
+                  <p className="text-sm font-bold">{formatCurrency(totalMetrics.totalCost)}</p>
                 </div>
                 <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                   <TrendingDown className="w-6 h-6 text-red-600" />
@@ -134,7 +134,7 @@ const CostAnalysis = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Total Profit</p>
-                  <p className="text-xl font-bold text-green-600">{formatCurrency(totalMetrics.totalProfit)}</p>
+                  <p className="text-sm font-bold text-green-600">{formatCurrency(totalMetrics.totalProfit)}</p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                   <TrendingUp className="w-6 h-6 text-green-600" />
@@ -154,7 +154,7 @@ const CostAnalysis = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Avg. Margin</p>
-                  <p className="text-xl font-bold">{totalMetrics.averageMargin.toFixed(1)}%</p>
+                  <p className="text-sm font-bold">{totalMetrics.averageMargin.toFixed(1)}%</p>
                 </div>
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                   <Target className="w-6 h-6 text-purple-600" />

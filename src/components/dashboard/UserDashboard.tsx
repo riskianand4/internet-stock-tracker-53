@@ -77,7 +77,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user, onStartTour }) => {
       </motion.div>
 
       <motion.div variants={itemVariants}>
-        <h2 className="text-2xl font-bold mb-4">Quick Overview</h2>
+        <h2 className="text-sm font-bold mb-4">Quick Overview</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {recentStats.map((stat) => (
             <Card key={stat.label} className="hover:shadow-md transition-shadow">
@@ -85,7 +85,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user, onStartTour }) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-                    <p className="text-2xl font-bold">{stat.value}</p>
+                    <p className="text-md font-bold">{stat.value}</p>
                     <p className="text-xs text-green-600">+{stat.trend} from last month</p>
                   </div>
                   <stat.icon className="h-8 w-8 text-muted-foreground" />
@@ -97,7 +97,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user, onStartTour }) => {
       </motion.div>
 
       <motion.div variants={itemVariants}>
-        <h2 className="text-2xl font-bold mb-4">Quick Actions</h2>
+        <h2 className="text-sm font-bold mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {quickActions.map((action) => (
             <motion.div key={action.title} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>

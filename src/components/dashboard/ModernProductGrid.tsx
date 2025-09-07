@@ -137,7 +137,7 @@ const ModernProductGrid = () => {
                 <Package className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
               </div>
               <div>
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground">{stats.total}</p>
+                <p className="text-sm sm:text-md lg:text-md font-bold text-foreground">{stats.total}</p>
                 <p className="text-xs lg:text-sm text-muted-foreground">Total Produk</p>
               </div>
             </div>
@@ -151,7 +151,7 @@ const ModernProductGrid = () => {
                 <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
               </div>
               <div>
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground">{stats.inStock}</p>
+                <p className="text-sm sm:text-md lg:text-md font-bold text-foreground">{stats.inStock}</p>
                 <p className="text-xs lg:text-sm text-muted-foreground">Stok Tersedia</p>
               </div>
             </div>
@@ -165,7 +165,7 @@ const ModernProductGrid = () => {
                 <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
               </div>
               <div>
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground">{stats.lowStock}</p>
+                <p className="text-sm sm:text-md lg:text-md font-bold text-foreground">{stats.lowStock}</p>
                 <p className="text-xs lg:text-sm text-muted-foreground">Stok Menipis</p>
               </div>
             </div>

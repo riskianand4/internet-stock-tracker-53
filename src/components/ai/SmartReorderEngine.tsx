@@ -176,7 +176,7 @@ const SmartReorderEngine = () => {
               <ShoppingCart className="h-4 w-4 text-primary" />
               <span className="text-sm font-medium">Total Recommendations</span>
             </div>
-            <div className="text-2xl font-bold">{reorderRecommendations.length}</div>
+            <div className="text-md font-bold">{reorderRecommendations.length}</div>
           </CardContent>
         </Card>
         <Card>
@@ -185,7 +185,7 @@ const SmartReorderEngine = () => {
               <DollarSign className="h-4 w-4 text-green-600" />
               <span className="text-sm font-medium">Estimated Value</span>
             </div>
-            <div className="text-2xl font-bold">
+            <div className="text-md font-bold">
               Rp {totalRecommendedValue.toLocaleString('id-ID')}
             </div>
           </CardContent>
@@ -196,7 +196,7 @@ const SmartReorderEngine = () => {
               <TrendingUp className="h-4 w-4 text-blue-600" />
               <span className="text-sm font-medium">Avg ROI</span>
             </div>
-            <div className="text-2xl font-bold">{avgROI.toFixed(1)}%</div>
+            <div className="text-md font-bold">{avgROI.toFixed(1)}%</div>
           </CardContent>
         </Card>
         <Card>
@@ -205,7 +205,7 @@ const SmartReorderEngine = () => {
               <AlertCircle className="h-4 w-4 text-red-600" />
               <span className="text-sm font-medium">Critical Items</span>
             </div>
-            <div className="text-2xl font-bold">
+            <div className="text-md font-bold">
               {reorderRecommendations.filter(r => r.urgency === 'critical').length}
             </div>
           </CardContent>

@@ -147,7 +147,7 @@ const ModernStatsOverview = memo(() => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Produk</p>
-                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground">{stats.totalProducts}</p>
+                <p className="text-lg sm:text-xl lg:text-md font-bold text-foreground">{stats.totalProducts}</p>
                 <div className="flex items-center space-x-1 mt-1">
                   <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-success" />
                   <span className="text-[10px] sm:text-xs text-success">+12% dari bulan lalu</span>
@@ -165,7 +165,7 @@ const ModernStatsOverview = memo(() => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Total Nilai</p>
-                <p className="text-2xl font-bold text-foreground">{formatCurrency(stats.totalValue)}</p>
+                <p className="text-md font-bold text-foreground">{formatCurrency(stats.totalValue)}</p>
                 <div className="flex items-center space-x-1 mt-1">
                   <TrendingUp className="w-4 h-4 text-success" />
                   <span className="text-xs text-success">+8% dari bulan lalu</span>
@@ -183,7 +183,7 @@ const ModernStatsOverview = memo(() => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Rata-rata Nilai</p>
-                <p className="text-2xl font-bold text-foreground">{formatCurrency(stats.averageValue)}</p>
+                <p className="text-md font-bold text-foreground">{formatCurrency(stats.averageValue)}</p>
                 <div className="flex items-center space-x-1 mt-1">
                   <TrendingDown className="w-4 h-4 text-warning" />
                   <span className="text-xs text-warning">-2% dari bulan lalu</span>
@@ -201,7 +201,7 @@ const ModernStatsOverview = memo(() => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Stok Menipis</p>
-                <p className="text-2xl font-bold text-foreground">
+                <p className="text-md font-bold text-foreground">
                   {stats.statusDistribution.find(s => s.name === 'Menipis')?.value || 0}
                 </p>
                 <div className="flex items-center space-x-1 mt-1">

@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Search, Package, AlertTriangle, TrendingUp, TrendingDown, Eye, Edit, RotateCcw, Plus, Minus, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useHybridInventoryItems } from '@/hooks/useHybridData';
@@ -44,6 +45,8 @@ const InventoryOverview = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const filteredItems = (inventoryItems as InventoryItem[]).filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.code.toLowerCase().includes(searchTerm.toLowerCase()) || item.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesLocation = selectedLocation === 'all' || item.location === selectedLocation;
@@ -101,6 +104,11 @@ const InventoryOverview = ({
   };
   const getStockPercentage = (item: InventoryItem) => {
     return Math.round(item.currentStock / item.maxStock * 100);
+  };
+
+  const handleViewDetail = (item: InventoryItem) => {
+    setSelectedItem(item);
+    setDetailDialogOpen(true);
   };
 
   // Statistics
@@ -270,37 +278,39 @@ const InventoryOverview = ({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Produk</TableHead>
-                  <TableHead>Kategori</TableHead>
-                  <TableHead>Stok Saat Ini</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Level Stok</TableHead>
-                  <TableHead>Lokasi</TableHead>
-                  <TableHead>Nilai</TableHead>
-                  <TableHead>Aksi</TableHead>
+                  <TableHead className="min-w-[200px]">Produk</TableHead>
+                  <TableHead className="min-w-[140px]">Kategori</TableHead>
+                  <TableHead className="min-w-[140px]">Stok Saat Ini</TableHead>
+                  <TableHead className="min-w-[120px]">Status</TableHead>
+                  <TableHead className="min-w-[120px]">Level Stok</TableHead>
+                  <TableHead className="min-w-[140px]">Lokasi</TableHead>
+                  <TableHead className="min-w-[120px]">Nilai</TableHead>
+                  <TableHead className="min-w-[100px]">Aksi</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredItems.map(item => <TableRow key={item.id}>
-                    <TableCell>
-                      <div>
-                        <div className="font-medium">{item.name}</div>
-                        <div className="text-sm text-muted-foreground">{item.code}</div>
+                {filteredItems.map(item => <TableRow key={item.id} className="cursor-pointer hover:bg-muted/50 transition-colors h-[60px]" onClick={() => handleViewDetail(item)}>
+                    <TableCell className="min-w-[200px]">
+                      <div className="space-y-1">
+                        <div className="font-medium text-sm line-clamp-1 leading-tight" title={item.name}>{item.name}</div>
+                        <div className="text-xs text-muted-foreground truncate" title={item.code}>{item.code}</div>
                       </div>
                     </TableCell>
-                    <TableCell>{item.category}</TableCell>
-                    <TableCell>
+                    <TableCell className="min-w-[140px]">
+                      <div className="text-sm truncate" title={item.category}>{item.category}</div>
+                    </TableCell>
+                    <TableCell className="min-w-[140px]">
                       <div className="flex items-center gap-2">
                         {getTrendIcon(item)}
-                        <span className="font-medium">{item.currentStock} {item.unit}</span>
+                        <span className="font-medium text-sm">{item.currentStock} {item.unit}</span>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <Badge className={getStatusColor(item.status)}>
+                    <TableCell className="min-w-[120px]">
+                      <Badge className={`${getStatusColor(item.status)} text-xs whitespace-nowrap`}>
                         {getStatusText(item.status)}
                       </Badge>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="min-w-[120px]">
                       <div className="w-24">
                         <Progress value={getStockPercentage(item)} className="h-2" />
                         <div className="text-xs text-muted-foreground mt-1">
@@ -308,15 +318,17 @@ const InventoryOverview = ({
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{item.location}</TableCell>
-                    <TableCell>
+                    <TableCell className="min-w-[140px]">
+                      <div className="text-sm truncate" title={item.location}>{item.location}</div>
+                    </TableCell>
+                    <TableCell className="min-w-[120px]">
                       <div className="text-sm">
                         {item.value > 0 ? `Rp ${item.value.toLocaleString('id-ID')}` : '-'}
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1">
-                        <Button variant="ghost" size="sm">
+                    <TableCell className="min-w-[100px]">
+                      <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
+                        <Button variant="ghost" size="sm" onClick={() => handleViewDetail(item)}>
                           <Eye className="w-4 h-4" />
                         </Button>
                         <Button variant="ghost" size="sm" onClick={() => onStockAdjustment?.(item.id)}>
@@ -330,6 +342,92 @@ const InventoryOverview = ({
           </CardContent>
         </Card>
       </motion.div>
+
+      {/* Detail Modal */}
+      <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Detail Inventori</DialogTitle>
+            <DialogDescription>
+              Informasi lengkap produk inventori
+            </DialogDescription>
+          </DialogHeader>
+          {selectedItem && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Nama Produk</label>
+                  <p className="text-sm font-medium">{selectedItem.name}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Kode Produk</label>
+                  <p className="text-sm font-medium">{selectedItem.code}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Kategori</label>
+                  <p className="text-sm">{selectedItem.category}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Lokasi</label>
+                  <p className="text-sm">{selectedItem.location}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Stok Saat Ini</label>
+                  <p className="text-sm font-medium">{selectedItem.currentStock} {selectedItem.unit}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Stok Minimum</label>
+                  <p className="text-sm">{selectedItem.minStock} {selectedItem.unit}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Stok Maksimum</label>
+                  <p className="text-sm">{selectedItem.maxStock} {selectedItem.unit}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Status</label>
+                  <Badge className={getStatusColor(selectedItem.status)}>
+                    {getStatusText(selectedItem.status)}
+                  </Badge>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Nilai Total</label>
+                  <p className="text-sm font-medium">
+                    {selectedItem.value > 0 ? `Rp ${selectedItem.value.toLocaleString('id-ID')}` : '-'}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Pergerakan Terakhir</label>
+                  <p className="text-sm">
+                    {new Date(selectedItem.lastMovement).toLocaleString('id-ID')}
+                  </p>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Level Stok</label>
+                <div className="mt-2">
+                  <Progress value={getStockPercentage(selectedItem)} className="h-3" />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {getStockPercentage(selectedItem)}% dari kapasitas maksimum
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4">
+                <Button variant="outline" onClick={() => setDetailDialogOpen(false)}>
+                  Tutup
+                </Button>
+                <Button onClick={() => {
+                  onStockAdjustment?.(selectedItem.id);
+                  setDetailDialogOpen(false);
+                }}>
+                  Atur Stok
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>;
 };
 export default InventoryOverview;

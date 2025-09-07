@@ -6,14 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
-import { 
-  Search, Package, AlertTriangle, TrendingUp, TrendingDown, 
-  Eye, Edit, RotateCcw, Plus, Minus, RefreshCw, Wifi, WifiOff
-} from 'lucide-react';
+import { Search, Package, AlertTriangle, TrendingUp, TrendingDown, Eye, Edit, RotateCcw, Plus, Minus, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useHybridInventoryItems } from '@/hooks/useHybridData';
 import { useToast } from '@/hooks/use-toast';
-
 interface InventoryItem {
   id: string;
   name: string;
@@ -28,84 +24,83 @@ interface InventoryItem {
   value: number;
   unit: string;
 }
-
-
 interface InventoryOverviewProps {
   onStockAdjustment?: (productId: string) => void;
 }
-
-const InventoryOverview = ({ onStockAdjustment }: InventoryOverviewProps) => {
-  const { toast } = useToast();
-  const { 
-    data: inventoryItems, 
-    isLoading, 
-    error, 
-    isFromApi, 
+const InventoryOverview = ({
+  onStockAdjustment
+}: InventoryOverviewProps) => {
+  const {
+    toast
+  } = useToast();
+  const {
+    data: inventoryItems,
+    isLoading,
+    error,
+    isFromApi,
     refresh,
-    lastUpdated 
+    lastUpdated
   } = useHybridInventoryItems();
-  
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
-
   const filteredItems = (inventoryItems as InventoryItem[]).filter(item => {
-    const matchesSearch = 
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.category.toLowerCase().includes(searchTerm.toLowerCase());
-    
+    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.code.toLowerCase().includes(searchTerm.toLowerCase()) || item.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesLocation = selectedLocation === 'all' || item.location === selectedLocation;
     const matchesStatus = selectedStatus === 'all' || item.status === selectedStatus;
-    
     return matchesSearch && matchesLocation && matchesStatus;
   });
-
   const handleRefresh = async () => {
     try {
       await refresh();
       toast({
         title: "Data Refreshed",
-        description: "Inventory data has been updated successfully",
+        description: "Inventory data has been updated successfully"
       });
     } catch (err) {
       toast({
         title: "Refresh Failed",
         description: "Failed to refresh inventory data",
-        variant: "destructive",
+        variant: "destructive"
       });
     }
   };
-
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'in_stock': return 'bg-success text-success-foreground';
-      case 'low_stock': return 'bg-warning text-warning-foreground';
-      case 'out_of_stock': return 'bg-destructive text-destructive-foreground';
-      case 'overstock': return 'bg-info text-info-foreground';
-      default: return 'bg-muted text-muted-foreground';
+      case 'in_stock':
+        return 'bg-success text-success-foreground';
+      case 'low_stock':
+        return 'bg-warning text-warning-foreground';
+      case 'out_of_stock':
+        return 'bg-destructive text-destructive-foreground';
+      case 'overstock':
+        return 'bg-info text-info-foreground';
+      default:
+        return 'bg-muted text-muted-foreground';
     }
   };
-
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'in_stock': return 'Stok Normal';
-      case 'low_stock': return 'Stok Rendah';
-      case 'out_of_stock': return 'Stok Habis';
-      case 'overstock': return 'Stok Berlebih';
-      default: return status;
+      case 'in_stock':
+        return 'Stok Normal';
+      case 'low_stock':
+        return 'Stok Rendah';
+      case 'out_of_stock':
+        return 'Stok Habis';
+      case 'overstock':
+        return 'Stok Berlebih';
+      default:
+        return status;
     }
   };
-
   const getTrendIcon = (item: InventoryItem) => {
     if (item.status === 'out_of_stock') return <TrendingDown className="w-4 h-4 text-destructive" />;
     if (item.status === 'low_stock') return <TrendingDown className="w-4 h-4 text-warning" />;
     if (item.status === 'overstock') return <TrendingUp className="w-4 h-4 text-info" />;
     return <TrendingUp className="w-4 h-4 text-success" />;
   };
-
   const getStockPercentage = (item: InventoryItem) => {
-    return Math.round((item.currentStock / item.maxStock) * 100);
+    return Math.round(item.currentStock / item.maxStock * 100);
   };
 
   // Statistics
@@ -115,15 +110,14 @@ const InventoryOverview = ({ onStockAdjustment }: InventoryOverviewProps) => {
     inStock: typedItems.filter(i => i.status === 'in_stock').length,
     lowStock: typedItems.filter(i => i.status === 'low_stock').length,
     outOfStock: typedItems.filter(i => i.status === 'out_of_stock').length,
-    totalValue: typedItems.reduce((sum, item) => sum + item.value, 0),
+    totalValue: typedItems.reduce((sum, item) => sum + item.value, 0)
   };
-
   if (isLoading) {
-    return (
-      <div className="space-y-6">
+    return <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Card key={i} className="animate-pulse">
+          {Array.from({
+          length: 4
+        }).map((_, i) => <Card key={i} className="animate-pulse">
               <CardHeader className="space-y-0 pb-2">
                 <div className="h-4 bg-muted rounded w-24" />
               </CardHeader>
@@ -131,22 +125,21 @@ const InventoryOverview = ({ onStockAdjustment }: InventoryOverviewProps) => {
                 <div className="h-8 bg-muted rounded w-16 mb-2" />
                 <div className="h-3 bg-muted rounded w-32" />
               </CardContent>
-            </Card>
-          ))}
+            </Card>)}
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       {/* Statistics Overview */}
-      <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
+      <motion.div initial={{
+      opacity: 0,
+      y: 20
+    }} animate={{
+      opacity: 1,
+      y: 0
+    }} transition={{
+      duration: 0.3
+    }} className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="bg-primary/10 border-primary/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Produk</CardTitle>
@@ -195,20 +188,19 @@ const InventoryOverview = ({ onStockAdjustment }: InventoryOverviewProps) => {
       </motion.div>
 
       {/* Filters */}
-      <motion.div 
-        className="flex flex-col sm:flex-row gap-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
-      >
+      <motion.div className="flex flex-col sm:flex-row gap-4" initial={{
+      opacity: 0,
+      y: 20
+    }} animate={{
+      opacity: 1,
+      y: 0
+    }} transition={{
+      duration: 0.3,
+      delay: 0.1
+    }}>
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-          <Input
-            placeholder="Cari produk, kode, atau kategori..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 bg-muted/50"
-          />
+          <Input placeholder="Cari produk, kode, atau kategori..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10 bg-muted/50" />
         </div>
         
         <Select value={selectedLocation} onValueChange={setSelectedLocation}>
@@ -238,22 +230,23 @@ const InventoryOverview = ({ onStockAdjustment }: InventoryOverviewProps) => {
       </motion.div>
 
       {/* Inventory Table */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.2 }}
-      >
+      <motion.div initial={{
+      opacity: 0,
+      y: 20
+    }} animate={{
+      opacity: 1,
+      y: 0
+    }} transition={{
+      duration: 0.3,
+      delay: 0.2
+    }}>
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
                   Real-time Stock Levels
-                  {isFromApi ? (
-                    <Wifi className="h-4 w-4 text-success" />
-                  ) : (
-                    <WifiOff className="h-4 w-4 text-muted-foreground" />
-                  )}
+                  {isFromApi ? <Wifi className="h-4 w-4 text-success" /> : <WifiOff className="h-4 w-4 text-muted-foreground" />}
                 </CardTitle>
                 <CardDescription>
                   Monitor semua level stok produk secara real-time
@@ -261,26 +254,17 @@ const InventoryOverview = ({ onStockAdjustment }: InventoryOverviewProps) => {
                 </CardDescription>
               </div>
               <div className="flex items-center gap-2">
-                {lastUpdated && (
-                  <span className="text-xs text-muted-foreground">
+                {lastUpdated && <span className="text-xs text-muted-foreground">
                     Updated: {lastUpdated.toLocaleTimeString()}
-                  </span>
-                )}
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleRefresh}
-                  disabled={isLoading}
-                >
+                  </span>}
+                <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
                   <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                 </Button>
               </div>
             </div>
-            {error && (
-              <div className="mt-2 p-2 bg-destructive/10 border border-destructive/20 rounded text-sm text-destructive">
+            {error && <div className="mt-2 p-2 bg-destructive/10 border border-destructive/20 rounded text-sm text-destructive">
                 {error}
-              </div>
-            )}
+              </div>}
           </CardHeader>
           <CardContent>
             <Table>
@@ -297,8 +281,7 @@ const InventoryOverview = ({ onStockAdjustment }: InventoryOverviewProps) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredItems.map((item) => (
-                  <TableRow key={item.id}>
+                {filteredItems.map(item => <TableRow key={item.id}>
                     <TableCell>
                       <div>
                         <div className="font-medium">{item.name}</div>
@@ -336,24 +319,17 @@ const InventoryOverview = ({ onStockAdjustment }: InventoryOverviewProps) => {
                         <Button variant="ghost" size="sm">
                           <Eye className="w-4 h-4" />
                         </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => onStockAdjustment?.(item.id)}
-                        >
+                        <Button variant="ghost" size="sm" onClick={() => onStockAdjustment?.(item.id)}>
                           <RotateCcw className="w-4 h-4" />
                         </Button>
                       </div>
                     </TableCell>
-                  </TableRow>
-                ))}
+                  </TableRow>)}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
       </motion.div>
-    </div>
-  );
+    </div>;
 };
-
 export default InventoryOverview;

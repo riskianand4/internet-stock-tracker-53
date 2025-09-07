@@ -58,19 +58,7 @@ const ProductCard = ({
   }} onHoverStart={() => setIsHovered(true)} onHoverEnd={() => setIsHovered(false)} className="relative">
       <Card className="glass hover-lift border-border/50 overflow-hidden group">
         {/* Header with checkbox and menu */}
-        <div className="absolute top-3 left-3 right-3 flex justify-between items-center z-10">
-          {isAdmin && <Checkbox checked={isSelected} onCheckedChange={onSelect} className="bg-background/80 backdrop-blur-sm" />}
-          {!isAdmin && <div />}
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            
-          </DropdownMenu>
-        </div>
+        
 
         {/* Product Image/Icon */}
         <div className="h-40 bg-primary/10 flex items-center justify-center relative overflow-hidden">

@@ -27,7 +27,6 @@ const ProductCard = ({
     user
   } = useApp();
   const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
-  const [isHovered, setIsHovered] = useState(false);
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'in_stock':
@@ -53,10 +52,8 @@ const ProductCard = ({
     }
   };
   const stockPercentage = product.stock / (product.minStock * 3) * 100;
-  return <motion.div whileHover={{
-    y: -4
-  }} onHoverStart={() => setIsHovered(true)} onHoverEnd={() => setIsHovered(false)} className="relative">
-      <Card className="glass hover-lift border-border/50 overflow-hidden group">
+  return <div className="relative">
+      <Card className="glass hover-lift border-border/50 overflow-hidden group cursor-pointer h-[400px] flex flex-col" onClick={() => onView?.(product)}>
         {/* Header with checkbox and menu */}
         
 
@@ -72,23 +69,23 @@ const ProductCard = ({
           </div>
         </div>
 
-        <CardContent className="p-4 space-y-3">
+        <CardContent className="p-4 space-y-3 flex-1 flex flex-col">
           {/* Product Name and SKU */}
-          <div>
-            <h3 className="font-semibold text-sm line-clamp-2 mb-1">
+          <div className="min-h-[60px]">
+            <h3 className="font-semibold text-sm line-clamp-2 mb-1 leading-tight" title={product.name}>
               {product.name}
             </h3>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground truncate" title={product.sku}>
               SKU: {product.sku}
             </p>
           </div>
 
           {/* Category and Status */}
-          <div className="flex items-center justify-between">
-            <Badge variant="outline" className="text-xs">
+          <div className="flex items-center justify-between gap-2 min-h-[24px]">
+            <Badge variant="outline" className="text-xs truncate max-w-[120px]" title={product.category}>
               {product.category}
             </Badge>
-            <Badge variant={getStatusColor(product.status) === 'success' ? 'default' : 'secondary'} className={`text-xs ${getStatusColor(product.status) === 'warning' ? 'bg-warning text-warning-foreground' : getStatusColor(product.status) === 'destructive' ? 'bg-destructive text-destructive-foreground' : ''}`}>
+            <Badge variant={getStatusColor(product.status) === 'success' ? 'default' : 'secondary'} className={`text-xs whitespace-nowrap ${getStatusColor(product.status) === 'warning' ? 'bg-warning text-warning-foreground' : getStatusColor(product.status) === 'destructive' ? 'bg-destructive text-destructive-foreground' : ''}`}>
               {getStatusLabel(product.status)}
             </Badge>
           </div>
@@ -115,13 +112,13 @@ const ProductCard = ({
           </div>
 
           {/* Location and Last Updated */}
-          <div className="space-y-1 text-xs text-muted-foreground">
+          <div className="space-y-1 text-xs text-muted-foreground flex-1">
             {product.location && <div className="flex items-center gap-1">
-                <MapPin className="w-3 h-3" />
-                <span>{product.location}</span>
+                <MapPin className="w-3 h-3 flex-shrink-0" />
+                <span className="truncate" title={product.location}>{product.location}</span>
               </div>}
             <div className="flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
+              <Calendar className="w-3 h-3 flex-shrink-0" />
               <span>
                 {new Date(product.updatedAt).toLocaleDateString('id-ID', {
                 day: '2-digit',
@@ -135,35 +132,16 @@ const ProductCard = ({
           {/* Supplier */}
           {product.supplier && <div className="pt-2 border-t border-border/50">
               <p className="text-xs text-muted-foreground">
-                Supplier: <span className="font-medium">{product.supplier}</span>
+                Supplier: <span className="font-medium truncate" title={product.supplier}>{product.supplier}</span>
               </p>
             </div>}
 
-          {/* Action Buttons - Show on Hover */}
-          <motion.div initial={{
-          opacity: 0,
-          height: 0
-        }} animate={{
-          opacity: isHovered ? 1 : 0,
-          height: isHovered ? 'auto' : 0
-        }} transition={{
-          duration: 0.2
-        }} className="flex gap-2 pt-2 border-t border-border/50 overflow-hidden">
-            <Button size="sm" variant="outline" className="flex-1 text-xs" onClick={() => onView?.(product)}>
-              <Eye className="w-3 h-3 mr-1" />
-              Detail
-            </Button>
-            <Button size="sm" variant="outline" className="flex-1 text-xs" onClick={() => onEdit?.(product)}>
-              <Edit className="w-3 h-3 mr-1" />
-              Edit
-            </Button>
-          </motion.div>
         </CardContent>
 
         {/* Stock Alert Indicator */}
         {product.status === 'low_stock' && <div className="absolute top-0 right-0 w-0 h-0 border-l-[20px] border-l-transparent border-t-[20px] border-t-warning" />}
         {product.status === 'out_of_stock' && <div className="absolute top-0 right-0 w-0 h-0 border-l-[20px] border-l-transparent border-t-[20px] border-t-destructive" />}
       </Card>
-    </motion.div>;
+    </div>;
 };
 export default ProductCard;

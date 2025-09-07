@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { MoreVertical, Edit, Trash2, Eye, Package, MapPin, Calendar, Image as ImageIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -27,7 +27,6 @@ interface ProductCardProps {
 const ProductCard = ({ product, isSelected, onSelect, onView, onEdit }: ProductCardProps) => {
   const { user } = useApp();
   const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
-  const [isHovered, setIsHovered] = useState(false);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -51,12 +50,10 @@ const ProductCard = ({ product, isSelected, onSelect, onView, onEdit }: ProductC
 
   return (
     <motion.div
-      whileHover={{ y: -4 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      className="relative"
+      className="relative cursor-pointer"
+      onClick={() => onView?.(product)}
     >
-      <Card className="glass hover-lift border-border/50 overflow-hidden group">
+      <Card className="glass border-border/50 overflow-hidden group hover:shadow-lg transition-shadow duration-200">
         {/* Header with checkbox and menu */}
         <div className="absolute top-3 left-3 right-3 flex justify-between items-center z-10">
           {isAdmin && (
@@ -64,6 +61,7 @@ const ProductCard = ({ product, isSelected, onSelect, onView, onEdit }: ProductC
               checked={isSelected}
               onCheckedChange={onSelect}
               className="bg-background/80 backdrop-blur-sm"
+              onClick={(e) => e.stopPropagation()}
             />
           )}
           {!isAdmin && <div />}
@@ -74,18 +72,19 @@ const ProductCard = ({ product, isSelected, onSelect, onView, onEdit }: ProductC
                 variant="ghost"
                 size="sm"
                 className="h-8 w-8 p-0 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={(e) => e.stopPropagation()}
               >
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-background border shadow-lg z-50">
-              <DropdownMenuItem onClick={() => onView?.(product)}>
+              <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onView?.(product); }}>
                 <Eye className="mr-2 h-4 w-4" />
                 Lihat Detail
               </DropdownMenuItem>
               {isAdmin && onEdit && (
                 <>
-                  <DropdownMenuItem onClick={() => onEdit?.(product)}>
+                  <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onEdit?.(product); }}>
                     <Edit className="mr-2 h-4 w-4" />
                     Edit Produk
                   </DropdownMenuItem>
@@ -198,26 +197,6 @@ const ProductCard = ({ product, isSelected, onSelect, onView, onEdit }: ProductC
               </p>
             </div>
           )}
-
-          {/* Action Buttons - Show on Hover */}
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ 
-              opacity: isHovered ? 1 : 0, 
-              height: isHovered ? 'auto' : 0 
-            }}
-            transition={{ duration: 0.2 }}
-            className="flex gap-2 pt-2 border-t border-border/50 overflow-hidden"
-          >
-            <Button size="sm" variant="outline" className="flex-1 text-xs" onClick={() => onView?.(product)}>
-              <Eye className="w-3 h-3 mr-1" />
-              Detail
-            </Button>
-            <Button size="sm" variant="outline" className="flex-1 text-xs" onClick={() => onEdit?.(product)}>
-              <Edit className="w-3 h-3 mr-1" />
-              Edit
-            </Button>
-          </motion.div>
         </CardContent>
 
         {/* Stock Alert Indicator */}
